@@ -16,6 +16,25 @@ body {
 .zoneCanvas canvas.viewport{
   width:100%;
 }
-.zoneCanvas canvas.navigator{
-  width:200px
+
+
+.zoneCanvas {
+  position: relative;
+}
+.zoneCanvas  canvas{
+  position: absolute;
+}
+
+.zoneCanvas {
+  width: 200px;
+  height:200px;
+}
+
+.zoneCanvas canvas.drawing {
+  background: transparent;
+}
+
+
+canvas {
+  border:1px solid  red;
 }

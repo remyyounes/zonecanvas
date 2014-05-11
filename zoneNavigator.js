@@ -12,17 +12,17 @@
       this.attachHandlers();
     },
     renderPreview: function(){
-      var preview = $("<canvas></canvas>");
+      var preview = $("<div id='navigatorCanvas'></div>");
       this.$el.append(preview);
       this.preview = new ZoneCanvas({
-        canvas: preview
+        el: preview
       });
     },
     attachHandlers: function(){
+      var zoneNavigator = this;
       $(this.preview).on("zoneselected", function(e, data){
-        debugger;
-        $(this).trigger("zoneselected", data);
-      })
+        $(zoneNavigator).trigger("zoneselected", [data]);
+      });
     },
     setImage: function(image){
       this.image = image;

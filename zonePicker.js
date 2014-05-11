@@ -11,9 +11,9 @@
       this.renderViewPort();
     },
     renderViewPort: function(){
-      var viewport = $("<canvas></canvas>");
+      var viewport = $("<div id='pickerCanvas'></div>");
       this.$el.append(viewport);
-      this.viewport = new ZoneCanvas({ canvas: viewport });
+      this.viewport = new ZoneCanvas({ el: viewport });
     },
     setImage: function(image){
       this.image = image;
