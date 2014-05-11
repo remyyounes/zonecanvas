@@ -1,0 +1,21 @@
+body {
+  font-family: sans-serif;
+  background: #DCE9E9;
+}
+
+.zoneCanvas {
+  background: rgb(255, 245, 211);
+  border: 2px dashed  #ccc;
+}
+
+.zoneCanvas canvas{
+  border: 1px solid #ccc;
+  background: white;
+}
+
+.zoneCanvas canvas.viewport{
+  width:100%;
+}
+.zoneCanvas canvas.navigator{
+  width:200px
+}
