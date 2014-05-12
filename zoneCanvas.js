@@ -7,7 +7,6 @@
       this.drag = false;
       this.selectionCoordinates = {};
       this.viewZone = {x: 0, y: 0, width:0, height: 0};
-      this.eventBus = $({});
       this.init();
     };
 
@@ -44,26 +43,29 @@
           e.preventDefault();
           if(!zoneCanvas.image) return;
           zoneCanvas.drag = true;
-          var mousePos = getMousePosition(zoneCanvas.canvas, e);
-          zoneCanvas.selectionCoordinates.x = mousePos.x;
-          zoneCanvas.selectionCoordinates.y = mousePos.y;
+          zoneCanvas.setMouseSelectionCoordinates( getMousePosition(zoneCanvas.canvas, e), true);
         }).on("mouseup", function(e){
           e.preventDefault();
           if(!zoneCanvas.drag) return;
           zoneCanvas.drag = false;
-          var mousePos = getMousePosition(zoneCanvas.canvas, e);
-          zoneCanvas.selectionCoordinates.width = mousePos.x - zoneCanvas.selectionCoordinates.x;
-          zoneCanvas.selectionCoordinates.height = mousePos.y - zoneCanvas.selectionCoordinates.y;
+          zoneCanvas.setMouseSelectionCoordinates( getMousePosition(zoneCanvas.canvas, e), false);
+          zoneCanvas.drawSelectionBox();
         }).on("mousemove", function(e){
           e.preventDefault()
-          if(zoneCanvas.drag){
-            var mousePos = getMousePosition(zoneCanvas.canvas, e);
-              zoneCanvas.selectionCoordinates.width = mousePos.x - zoneCanvas.selectionCoordinates.x;
-              zoneCanvas.selectionCoordinates.height = mousePos.y - zoneCanvas.selectionCoordinates.y;
-            $(zoneCanvas).trigger("zoneselected", zoneCanvas.getStandardCoordinates());
-            zoneCanvas.drawSelectionBox();
-          }
+          if(!zoneCanvas.drag) return;
+          zoneCanvas.setMouseSelectionCoordinates( getMousePosition(zoneCanvas.canvas, e), false);
+          zoneCanvas.drawSelectionBox();
+          $(zoneCanvas).trigger("zoneselected", zoneCanvas.getStandardCoordinates());
         });
+      },
+      setMouseSelectionCoordinates: function(coordinates, startCoordinates){
+        if(startCoordinates){
+          this.selectionCoordinates.x = coordinates.x;
+          this.selectionCoordinates.y = coordinates.y;
+        }else{
+          this.selectionCoordinates.width = coordinates.x - this.selectionCoordinates.x;
+          this.selectionCoordinates.height = coordinates.y - this.selectionCoordinates.y;
+        }
       },
       drawSelectionBox: function() {
         this.clear(this.canvasDrawing);
@@ -91,10 +93,7 @@
       },
       clear: function(canvas){
         var ctx = canvas.getContext("2d");
-        ctx.clearRect(0,0,
-          canvas.width,
-          canvas.height
-        );
+        ctx.clearRect(0,0, canvas.width, canvas.height );
       },
       drawZone: function(){
         this.clear(this.canvas);
@@ -134,9 +133,10 @@
       },
       adjustCanvasDimensions: function(){
         // resize Canvas
-        this.$canvas.attr("height", this.viewZone.height * this.zoomFactor );
-        this.$canvasDrawing.attr("height", this.viewZone.height * this.zoomFactor );
-        this.$canvas.parent().css("height", this.viewZone.height * this.zoomFactor );
+        var canvasHeight = this.viewZone.height * this.zoomFactor;
+        this.$canvas.attr("height", canvasHeight);
+        this.$canvasDrawing.attr("height", canvasHeight);
+        this.$el.css("height", canvasHeight);
       },
       // flips coordinates when negative widths and heights.
       normalizeZone: function(zone){
