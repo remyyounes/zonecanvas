@@ -9,6 +9,7 @@
   ZonePicker.prototype = {
     init: function(){
       this.renderViewPort();
+      this.attachHandlers();
     },
     renderViewPort: function(){
       var viewport = $("<div id='pickerCanvas'></div>");
@@ -21,7 +22,13 @@
     },
     zoomZone: function(zone){
       this.viewport.zoomZone(zone);
-    }
+    },
+    attachHandlers: function(){
+      var zonePicker = this;
+      $(this.viewport).on("zoneselected", function(e, data){
+        $(zonePicker).trigger("zoneselected", [data]);
+      });
+    },
   };
 
   window.ZonePicker = ZonePicker;

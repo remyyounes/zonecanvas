@@ -14,9 +14,7 @@
     renderPreview: function(){
       var preview = $("<div id='navigatorCanvas'></div>");
       this.$el.append(preview);
-      this.preview = new ZoneCanvas({
-        el: preview
-      });
+      this.preview = new ZoneCanvas({ el: preview });
     },
     attachHandlers: function(){
       var zoneNavigator = this;

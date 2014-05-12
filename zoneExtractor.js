@@ -15,6 +15,7 @@
     render: function(){
       this.renderNavigator();
       this.renderViewport();
+      this.renderFragments();
     },
     renderNavigator: function(){
       var navigator = $("<div class='navigator'></div>");
@@ -26,11 +27,21 @@
       this.$el.append(picker);
       this.picker = new ZonePicker({ el: picker });
     },
+    renderFragments: function(){
+      var fragment = $("<div class='fragment'></div>");
+      this.$el.append(fragment);
+      this.fragment = new ZoneFragment({ el: fragment });
+    },
     attachHandlers: function(){
       var zoneExtractor = this;
       $(this.navigator).on("zoneselected", function(event, data){
         zoneExtractor.picker.zoomZone(data);
       });
+      $(this.picker).on("zoneselected", function(event, data){
+        debugger;
+        zoneExtractor.fragment.zoomZone(data);
+      });
+
       this.attachFilerDropHandler();
     },
     attachFilerDropHandler: function(){
@@ -57,6 +68,7 @@
         zoneExtractor.image.onload = function(){
           zoneExtractor.navigator.setImage(zoneExtractor.image);
           zoneExtractor.picker.setImage(zoneExtractor.image);
+          zoneExtractor.fragment.setImage(zoneExtractor.image);
         };
       };
       reader.readAsDataURL(file);
