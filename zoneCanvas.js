@@ -6,7 +6,7 @@
       this.zoomFactor = params.zoomFactor || 1;
       this.drag = false;
       this.selectionCoordinates = {};
-      this.imageOffset = {x: 0, y: 0};
+      this.viewZone = {x: 0, y: 0, width:0, height: 0};
       this.eventBus = $({});
       this.init();
     };
@@ -78,8 +78,8 @@
         var ratio = 1/this.zoomFactor,
           coords = this.selectionCoordinates,
           standardized =  {
-            x: coords.x * ratio + this.imageOffset.x,
-            y: coords.y * ratio + this.imageOffset.y,
+            x: coords.x * ratio + this.viewZone.x,
+            y: coords.y * ratio + this.viewZone.y,
             width: coords.width * ratio,
             height: coords.height * ratio
           };
@@ -99,8 +99,20 @@
       zoom: function(z){
         this.clear(this.canvas);
         this.zoomFactor = z;
+        this.viewZone = {
+          x:0,
+          y:0,
+          width:this.image.width,
+          height:this.image.height
+        };
         this.context.drawImage(
-          this.image, 0, 0,
+          this.image,
+          this.viewZone.x,
+          this.viewZone.y,
+          this.viewZone.width,
+          this.viewZone.height,
+          0,
+          0,
           this.image.width * this.zoomFactor,
           this.image.height * this.zoomFactor
         );
@@ -116,29 +128,32 @@
       zoomZone: function(zone){
         this.clear(this.canvas);
         zone = this.normalizeZone(zone);
-        this.imageOffset.x = zone.x;
-        this.imageOffset.y = zone.y;
-
+        this.setZone(zone);
         this.zoomFactor = this.canvas.width / zone.width;
 
-        // resize Canvas
-        this.$canvas.attr("height", zone.height * this.zoomFactor );
-        this.$canvasDrawing.attr("height", zone.height * this.zoomFactor );
-        this.$canvas.parent().css("height", zone.height * this.zoomFactor );
+        this.adjustCanvasDimensions();
 
         this.context.drawImage(
           this.image,
-          this.imageOffset.x,
-          this.imageOffset.y,
-          zone.width,
-          zone.height,
+          this.viewZone.x,
+          this.viewZone.y,
+          this.viewZone.width,
+          this.viewZone.height,
           0,
           0,
           this.canvas.width,
           this.canvas.height
         )
       },
-
+      setZone: function(zone){
+        this.viewZone = zone;
+      },
+      adjustCanvasDimensions: function(){
+        // resize Canvas
+        this.$canvas.attr("height", this.viewZone.height * this.zoomFactor );
+        this.$canvasDrawing.attr("height", this.viewZone.height * this.zoomFactor );
+        this.$canvas.parent().css("height", this.viewZone.height * this.zoomFactor );
+      },
       // flips coordinates when negative widths and heights.
       normalizeZone: function(zone){
         if(zone.width<0){
