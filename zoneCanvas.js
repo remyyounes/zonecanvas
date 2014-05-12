@@ -96,15 +96,8 @@
           canvas.height
         );
       },
-      zoom: function(z){
+      drawZone: function(){
         this.clear(this.canvas);
-        this.zoomFactor = z;
-        this.viewZone = {
-          x:0,
-          y:0,
-          width:this.image.width,
-          height:this.image.height
-        };
         this.context.drawImage(
           this.image,
           this.viewZone.x,
@@ -113,9 +106,14 @@
           this.viewZone.height,
           0,
           0,
-          this.image.width * this.zoomFactor,
-          this.image.height * this.zoomFactor
+          this.viewZone.width * this.zoomFactor,
+          this.viewZone.height * this.zoomFactor
         );
+      },
+      zoom: function(z){
+        this.zoomFactor = z;
+        this.viewZone = { x:0, y:0, width:this.image.width, height:this.image.height };
+        this.drawZone();
       },
       zoomIn: function(z){
         this.zoomFactor *= z || 2;
@@ -126,24 +124,10 @@
         this.zoom(this.zoomFactor);
       },
       zoomZone: function(zone){
-        this.clear(this.canvas);
-        zone = this.normalizeZone(zone);
-        this.setZone(zone);
+        this.setZone( this.normalizeZone(zone) );
         this.zoomFactor = this.canvas.width / zone.width;
-
         this.adjustCanvasDimensions();
-
-        this.context.drawImage(
-          this.image,
-          this.viewZone.x,
-          this.viewZone.y,
-          this.viewZone.width,
-          this.viewZone.height,
-          0,
-          0,
-          this.canvas.width,
-          this.canvas.height
-        )
+        this.drawZone();
       },
       setZone: function(zone){
         this.viewZone = zone;
