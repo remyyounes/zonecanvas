@@ -74,7 +74,7 @@
       });
     },
     showZonePicker: function(data){
-      this.fragment.setInfo(data.field, data.value);
+      this.fragment.setName(data.field, data.value);
       this.navigator.preview.selectCorner();
       this.picker.viewport.selectCorner();
       this.$el.addClass("picking");

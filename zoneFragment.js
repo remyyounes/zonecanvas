@@ -5,6 +5,7 @@
     this.$el = params.el;
     this.info = params.info || {};
     this.layoutConstraints = params.layoutConstraints;
+    this.name = "";
     this.init();
   };
 
@@ -50,8 +51,13 @@
       this.info[attr] = value;
       this.renderInfo();
     },
+    setName: function(attr, value){
+      this.name = attr;
+      this.setInfo(attr, value);
+    },
     zoomZone: function(zone){
       this.viewport.zoomZone(zone);
+      this.runOCR(this.viewport.getImageData());
       for(coord in zone)
         this.setInfo(coord, Math.round(zone[coord]));
     },
@@ -59,6 +65,18 @@
       this.image = image;
       this.viewport.drawImage(this.image);
       this.viewport.fit();
+    },
+    runOCR: function(image_data){
+      var zoneFragment = this;
+      window.ocradWorker.onmessage = function(e){
+        var processingTime = ((Date.now() - start)/1000).toFixed(2);
+        zoneFragment.ocrResultHandler( { result: e.data, time: processingTime } );
+      }
+      var start = Date.now()
+      window.ocradWorker.postMessage(image_data)
+    },
+    ocrResultHandler: function(data){
+      this.setName(this.name, data.result);
     }
   };
 

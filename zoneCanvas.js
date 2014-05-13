@@ -181,6 +181,9 @@
         ( this.layoutConstraints.height || this.canvas.height ) / this.image.height
       );
       this.zoom(fitRatio);
+    },
+    getImageData: function(){
+      return this.context.getImageData(0,0, this.canvas.width, this.canvas.height);
     }
   };
 
