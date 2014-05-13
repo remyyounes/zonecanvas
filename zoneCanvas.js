@@ -7,6 +7,7 @@
     this.drag = false;
     this.selectionCoordinates = {};
     this.viewZone = {x: 0, y: 0, width:0, height: 0};
+    this.layoutConstraints = params.layoutConstraints || { width: 400, height: 400 };
     this.init();
   };
 
@@ -111,7 +112,8 @@
     },
     zoom: function(z){
       this.zoomFactor = z;
-      this.viewZone = { x:0, y:0, width:this.image.width, height:this.image.height };
+      this.setZone({ x:0, y:0, width:this.image.width, height:this.image.height });
+      this.adjustCanvasDimensions(this.getOrientation());
       this.drawZone();
     },
     zoomIn: function(z){
@@ -124,18 +126,29 @@
     },
     zoomZone: function(zone){
       this.setZone( this.normalizeZone(zone) );
-      this.zoomFactor = this.canvas.width / zone.width;
-      this.adjustCanvasDimensions();
+      var orientation = this.getOrientation(),
+        dimension = orientation ? "width" : "height";
+      this.zoomFactor = ( this.layoutConstraints[dimension] || this.canvas[dimension] ) / zone[dimension];
+      this.adjustCanvasDimensions(orientation);
       this.drawZone();
+    },
+    getOrientation: function(){
+      var viewRatio = this.viewZone.width / this.viewZone.height;
+      var constraintsRatio = (this.layoutConstraints.width || this.canvas.width) /
+        (this.layoutConstraints.height || this.canvas.height);
+      return viewRatio > constraintsRatio;
     },
     setZone: function(zone){
       this.viewZone = zone;
     },
-    adjustCanvasDimensions: function(){
-      // resize Canvas
-      var canvasHeight = this.viewZone.height * this.zoomFactor;
+    adjustCanvasDimensions: function(horizontal){
+      var canvasHeight = this.viewZone.height * this.zoomFactor,
+        canvasWidth = this.viewZone.width * this.zoomFactor;
+      this.$canvas.attr("width", canvasWidth);
       this.$canvas.attr("height", canvasHeight);
+      this.$canvasDrawing.attr("width", canvasWidth);
       this.$canvasDrawing.attr("height", canvasHeight);
+      this.$el.css("width", canvasWidth);
       this.$el.css("height", canvasHeight);
     },
     // flips coordinates when negative widths and heights.
@@ -152,8 +165,8 @@
     },
     fit: function(){
       var fitRatio = Math.min(
-        this.canvas.width / this.image.width,
-        this.canvas.height / this.image.height
+        ( this.layoutConstraints.width || this.canvas.width ) / this.image.width,
+        ( this.layoutConstraints.height || this.canvas.height ) / this.image.height
       );
       this.zoom(fitRatio);
     }

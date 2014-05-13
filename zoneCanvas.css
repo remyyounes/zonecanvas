@@ -1,40 +1,18 @@
-body {
-  font-family: sans-serif;
-  background: #DCE9E9;
-}
-
 .zoneCanvas {
+  position: relative;
+  width: 100%;
+  min-height: 50px;
   background: rgb(255, 245, 211);
   border: 2px dashed  #ccc;
+  /*max-height:80%;*/
+  overflow-y: hidden;
 }
 
 .zoneCanvas canvas{
   border: 1px solid #ccc;
   background: white;
-}
-
-.zoneCanvas canvas.viewport{
-  width:100%;
-}
-
-
-.zoneCanvas {
-  position: relative;
-}
-.zoneCanvas  canvas{
   position: absolute;
 }
 
-.zoneCanvas {
-  width: 400px;
-  height:400px;
-}
-
-.zoneCanvas canvas.drawing {
-  background: transparent;
-}
-
-
-canvas {
-  border:1px solid  red;
-}
+.zoneCanvas canvas.viewport{ width:100%; }
+.zoneCanvas canvas.drawing { background: transparent; }

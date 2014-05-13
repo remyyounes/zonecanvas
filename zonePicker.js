@@ -3,6 +3,7 @@
     this.zoomFactor = params.zoomFactor || 1;
     this.el = params.el[0];
     this.$el = params.el;
+    this.layoutConstraints = params.layoutConstraints;
     this.init();
   };
 
@@ -14,7 +15,10 @@
     renderViewPort: function(){
       var viewport = $("<div id='pickerCanvas'></div>");
       this.$el.append(viewport);
-      this.viewport = new ZoneCanvas({ el: viewport });
+      this.viewport = new ZoneCanvas({
+        el: viewport,
+        layoutConstraints: this.layoutConstraints
+      });
     },
     setImage: function(image){
       this.image = image;

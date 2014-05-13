@@ -14,23 +14,32 @@
     },
     render: function(){
       this.renderNavigator();
-      this.renderViewport();
+      this.renderPicker();
       this.renderFragments();
     },
     renderNavigator: function(){
       var navigator = $("<div class='navigator'></div>");
       this.$el.append(navigator);
-      this.navigator = new ZoneNavigator({ el: navigator });
+      this.navigator = new ZoneNavigator({
+        el: navigator,
+        layoutConstraints: {width: 200, height: 200}
+      });
     },
-    renderViewport: function(){
+    renderPicker: function(){
       var picker = $("<div class='picker'></div>");
       this.$el.append(picker);
-      this.picker = new ZonePicker({ el: picker });
+      this.picker = new ZonePicker({
+        el: picker,
+        layoutConstraints: {width: 500, height: 600}
+      });
     },
     renderFragments: function(){
       var fragment = $("<div class='fragment'></div>");
       this.$el.append(fragment);
-      this.fragment = new ZoneFragment({ el: fragment });
+      this.fragment = new ZoneFragment({
+        el: fragment,
+        layoutConstraints: {width: 200, height: 200}
+      });
     },
     attachHandlers: function(){
       var zoneExtractor = this;

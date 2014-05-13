@@ -3,6 +3,7 @@
     this.zoomFactor = params.zoomFactor || 1;
     this.el = params.el[0];
     this.$el = params.el;
+    this.layoutConstraints = params.layoutConstraints;
     this.init();
   };
 
@@ -14,7 +15,10 @@
     renderPreview: function(){
       var preview = $("<div id='navigatorCanvas'></div>");
       this.$el.append(preview);
-      this.preview = new ZoneCanvas({ el: preview });
+      this.preview = new ZoneCanvas({
+        el: preview,
+        layoutConstraints: this.layoutConstraints
+      });
     },
     attachHandlers: function(){
       var zoneNavigator = this;
