@@ -23,6 +23,7 @@
     setImage: function(image){
       this.image = image;
       this.viewport.drawImage(this.image);
+      this.viewport.fit();
     },
     zoomZone: function(zone){
       this.viewport.zoomZone(zone);

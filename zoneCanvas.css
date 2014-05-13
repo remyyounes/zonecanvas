@@ -3,13 +3,12 @@
   width: 100%;
   min-height: 50px;
   background: rgb(255, 245, 211);
-  border: 2px dashed  #ccc;
+  border: 1px solid #ccc;
   /*max-height:80%;*/
   overflow-y: hidden;
 }
 
 .zoneCanvas canvas{
-  border: 1px solid #ccc;
   background: white;
   position: absolute;
 }

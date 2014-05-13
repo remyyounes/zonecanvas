@@ -9,7 +9,6 @@
   background: rgb(255, 245, 211);
 }
 
-
 .zoneSheet > * {
   display: inline-block;
   vertical-align:top;
@@ -26,3 +25,31 @@
   width: 100px;
   text-align:right;
   padding-right: 10px;
+}
+
+.zoneSheet .picker {
+  display: none;
+  position: absolute;
+  left: 290px;
+}
+
+.zoneSheet .fragment {
+  display: none;
+  margin-top: 20px;
+}
+
+
+.zoneSheet.picking .fragment { display: block; }
+.zoneSheet.picking .picker { display: inline-block; }
+.zoneSheet.picking .form { display: none; }
+
+.zoneSheet .fragment .controls div{
+  display: inline-block;
+  background: rgb(255, 250, 241);
+  border: 1px solid #ccc;
+  padding: 5px 2px;
+  margin: 5px 5px 0 0;
+  cursor: pointer;
+}
+.zoneSheet .fragment .controls div.cancel { color: red; }
+.zoneSheet .fragment .controls div.save { color: darkgreen; }
