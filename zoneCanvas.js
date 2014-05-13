@@ -56,7 +56,6 @@
         if(!zoneCanvas.drag) return;
         zoneCanvas.setMouseSelectionCoordinates( getMousePosition(zoneCanvas.canvas, e), false);
         zoneCanvas.drawSelectionBox();
-        $(zoneCanvas).trigger("zoneselected", zoneCanvas.getStandardCoordinates());
       });
     },
     setMouseSelectionCoordinates: function(coordinates, startCoordinates){
@@ -76,6 +75,14 @@
         this.selectionCoordinates.width,
         this.selectionCoordinates.height
       );
+      $(this).trigger("zoneselected", this.getStandardCoordinates());
+    },
+    selectCorner: function(){
+      this.selectionCoordinates.x = this.canvas.width / 2;
+      this.selectionCoordinates.y = this.canvas.height / 2;
+      this.selectionCoordinates.width = this.canvas.width / 2;
+      this.selectionCoordinates.height = this.canvas.height / 2;
+      this.drawSelectionBox();
     },
     getStandardCoordinates: function(){
       var ratio = 1/this.zoomFactor,

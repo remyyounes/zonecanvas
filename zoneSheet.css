@@ -1,6 +1,7 @@
 .sheetList {
   padding:20px;
   list-style: none;
+  max-width: 900px;
 }
 .zoneSheet {
   border: 1px solid #ccc;

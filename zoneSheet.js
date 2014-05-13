@@ -39,7 +39,7 @@
       var picker = $("<div class='picker'></div>");
       this.picker = new ZonePicker({
         el: picker,
-        layoutConstraints: { width: 500, height: 500}
+        layoutConstraints: { width: 600, height: 450}
       });
       this.picker.setImage(this.image);
       this.$picker = picker;
@@ -75,6 +75,8 @@
     },
     showZonePicker: function(data){
       this.fragment.setInfo(data.field, data.value);
+      this.navigator.preview.selectCorner();
+      this.picker.viewport.selectCorner();
       this.$el.addClass("picking");
     },
     hideZonePicker: function(){
