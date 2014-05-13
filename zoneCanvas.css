@@ -2,8 +2,8 @@
   position: relative;
   width: 100%;
   min-height: 50px;
-  background: rgb(255, 245, 211);
-  border: 1px solid #ccc;
+  background: rgb(255, 250, 241);
+  /*border: 1px solid #ccc;*/
   /*max-height:80%;*/
   overflow-y: hidden;
 }
@@ -11,6 +11,7 @@
 .zoneCanvas canvas{
   background: white;
   position: absolute;
+  cursor: crosshair;
 }
 
 .zoneCanvas canvas.viewport{ width:100%; }

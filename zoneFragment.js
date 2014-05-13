@@ -3,6 +3,7 @@
     this.zoomFactor = params.zoomFactor || 1;
     this.el = params.el[0];
     this.$el = params.el;
+    this.info = params.info || {};
     this.layoutConstraints = params.layoutConstraints;
     this.init();
   };
@@ -23,8 +24,13 @@
       });
     },
     renderInfo: function(){
-      this.$info = $("<div class='info'>info</div>");
-      this.$el.append(this.$info);
+      var rendered = this.$info ? true : false;
+      this.$info = this.$info || $("<ul class='info'></ul>");
+      this.$info.empty();
+      for( var field in this.info ){
+        this.$info.append("<li><label>"+field+"</label>"+this.info[field]+"</li>");
+      }
+      if(!rendered) this.$el.append(this.$info);
     },
     renderControls: function(){
       var controls = $("<div class='controls'></div>");
@@ -37,12 +43,17 @@
         $(zoneFragment).trigger("zonesaved", [data]);
       });
       $(this.controls).on("cancel", function(e, data){
-        debugger;
         $(zoneFragment).trigger("zonecancelled", [data]);
       });
     },
+    setInfo: function(attr, value){
+      this.info[attr] = value;
+      this.renderInfo();
+    },
     zoomZone: function(zone){
       this.viewport.zoomZone(zone);
+      for(coord in zone)
+        this.setInfo(coord, Math.round(zone[coord]));
     },
     setImage: function(image){
       this.image = image;
@@ -50,6 +61,7 @@
       this.viewport.fit();
     }
   };
+
 
   var ZoneFragmentControls = function(params){
     this.zoomFactor = params.zoomFactor || 1;
@@ -75,7 +87,6 @@
         $(controls).trigger("submit" ,[{}]);
       });
       this.$cancelBtn.on("click", function(){
-        debugger;
         $(controls).trigger("cancel" ,[{}]);
       });
     }

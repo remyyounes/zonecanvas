@@ -42,14 +42,3 @@
 .zoneSheet.picking .fragment { display: block; }
 .zoneSheet.picking .picker { display: inline-block; }
 .zoneSheet.picking .form { display: none; }
-
-.zoneSheet .fragment .controls div{
-  display: inline-block;
-  background: rgb(255, 250, 241);
-  border: 1px solid #ccc;
-  padding: 5px 2px;
-  margin: 5px 5px 0 0;
-  cursor: pointer;
-}
-.zoneSheet .fragment .controls div.cancel { color: red; }
-.zoneSheet .fragment .controls div.save { color: darkgreen; }

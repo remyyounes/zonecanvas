@@ -4,7 +4,7 @@
     this.el = params.el[0];
     this.$el = params.el;
     this.layoutConstraints = params.layoutConstraints;
-    this.init();
+    this.init();''
   };
 
   ZonePicker.prototype = {

@@ -62,7 +62,7 @@
       });
 
       $(this.form).on("zonerequested", function(event, data){
-        zoneSheet.showZonePicker();
+        zoneSheet.showZonePicker(data);
       });
 
       $(this.fragment).on("zonesaved", function(event, data){
@@ -73,7 +73,8 @@
         zoneSheet.hideZonePicker();
       });
     },
-    showZonePicker: function(){
+    showZonePicker: function(data){
+      this.fragment.setInfo(data.field, data.value);
       this.$el.addClass("picking");
     },
     hideZonePicker: function(){

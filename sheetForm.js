@@ -15,11 +15,15 @@
       var sheetForm = this;
       for(f in this.fields){
         var prop = $("<div><label>"+f+"</label>");
-        var input = $("<input name='"+f+"'/>");
+        var input = $("<div class='zoneInput'><input name='"+f+"'/><button/>");
         prop.append(input);
         this.$el.append(prop);
-        input.on("click", function(){
-          $(sheetForm).trigger("zonerequested", [{field: this.name}]);
+        input.on("click", "button", function(){
+          var inputField = $(this).parent().find("input");
+          $(sheetForm).trigger("zonerequested", [{
+              field: inputField.attr("name"),
+              value: inputField.val()
+          }]);
         });
       }
     },
