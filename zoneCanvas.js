@@ -150,13 +150,18 @@
     },
     adjustCanvasDimensions: function(horizontal){
       var canvasHeight = this.viewZone.height * this.zoomFactor,
-        canvasWidth = this.viewZone.width * this.zoomFactor;
-      this.$canvas.attr("width", canvasWidth);
-      this.$canvas.attr("height", canvasHeight);
-      this.$canvasDrawing.attr("width", canvasWidth);
-      this.$canvasDrawing.attr("height", canvasHeight);
-      this.$el.css("width", canvasWidth);
-      this.$el.css("height", canvasHeight);
+        canvasWidth = this.viewZone.width * this.zoomFactor,
+        canvasLeft = ((this.layoutConstraints.width || canvasWidth ) - canvasWidth) / 2,
+        canvasTop = ((this.layoutConstraints.height || canvasHeight ) - canvasHeight) / 2,
+        $canvases = this.$canvas.add(this.$canvasDrawing);
+
+      $canvases.attr("width", canvasWidth);
+      $canvases.attr("height", canvasHeight);
+      $canvases.css("left", canvasLeft);
+      $canvases.css("top", canvasTop);
+
+      this.$el.css("width", this.layoutConstraints.width || canvasWidth);
+      this.$el.css("height", this.layoutConstraints.height || canvasHeight);
     },
     // flips coordinates when negative widths and heights.
     normalizeZone: function(zone){
