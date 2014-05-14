@@ -2,6 +2,8 @@
   padding:20px;
   list-style: none;
   max-width: 900px;
+  margin: auto;
+  position:relative;
 }
 .zoneSheet {
   border: 1px solid #ccc;
@@ -21,17 +23,29 @@
   width: calc( 100% - 270px );
 }
 
+.zoneSheet .zoneInput { display: inline-block; }
+.zoneSheet > .form input {
+  border: 1px solid #ddd;
+  padding: 3px;
+}
+
 .zoneSheet > .form label {
   display: inline-block;
   width: 100px;
   text-align:right;
   padding-right: 10px;
 }
+.zoneSheet > .form button {
+  display: inline-block;
+  background: #DCE9E9;
+  border: 1px solid #ddd;
+  position: relative;
+}
 
 .zoneSheet .picker {
   display: none;
   position: absolute;
-  left: 290px;
+  left: 280px;
 }
 
 .zoneSheet .fragment {

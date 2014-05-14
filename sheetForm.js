@@ -15,7 +15,7 @@
       var sheetForm = this;
       for(f in this.fields){
         var prop = $("<div><label>"+f+"</label>");
-        var input = $("<div class='zoneInput'><input name='"+f+"'/><button/>");
+        var input = $("<div class='zoneInput'><input name='"+f+"'/><button>zone</button>");
         prop.append(input);
         this.$el.append(prop);
         input.on("click", "button", function(){
@@ -26,6 +26,9 @@
           }]);
         });
       }
+    },
+    setValue: function(attribute, value){
+      this.$el.find("input[name='"+attribute+"']").val(value);
     },
     attachHandlers: function(){
 

@@ -28,9 +28,8 @@
       var rendered = this.$info ? true : false;
       this.$info = this.$info || $("<ul class='info'></ul>");
       this.$info.empty();
-      for( var field in this.info ){
+      for( var field in this.info )
         this.$info.append("<li><label>"+field+"</label>"+this.info[field]+"</li>");
-      }
       if(!rendered) this.$el.append(this.$info);
     },
     renderControls: function(){
@@ -41,11 +40,15 @@
     attachHandlers: function(){
       var zoneFragment = this;
       $(this.controls).on("submit", function(e, data){
+        data.info = zoneFragment.info;
         $(zoneFragment).trigger("zonesaved", [data]);
       });
       $(this.controls).on("cancel", function(e, data){
         $(zoneFragment).trigger("zonecancelled", [data]);
       });
+    },
+    clearInfo: function(){
+      this.info = {};
     },
     setInfo: function(attr, value){
       this.info[attr] = value;
@@ -56,6 +59,7 @@
       this.setInfo(attr, value);
     },
     zoomZone: function(zone){
+      if(!zone.width || !zone.height) return;
       this.viewport.zoomZone(zone);
       this.runOCR(this.viewport.getImageData());
       for(coord in zone)

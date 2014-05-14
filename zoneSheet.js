@@ -60,20 +60,18 @@
       $(this.picker).on("zoneselected", function(event, data){
         zoneSheet.fragment.zoomZone(data);
       });
-
       $(this.form).on("zonerequested", function(event, data){
         zoneSheet.showZonePicker(data);
       });
-
       $(this.fragment).on("zonesaved", function(event, data){
-        // this.recordZone(currentAttribute, fragment.getZone());
-      });
-
-      $(this.fragment).on("zonecancelled", function(event, data){
+        zoneSheet.form.setValue(this.name, data.info[this.name]);
+        zoneSheet.hideZonePicker();
+      }).on("zonecancelled", function(event, data){
         zoneSheet.hideZonePicker();
       });
     },
     showZonePicker: function(data){
+      this.fragment.clearInfo();
       this.fragment.setName(data.field, data.value);
       this.navigator.preview.selectCorner();
       this.picker.viewport.selectCorner();
