@@ -1,0 +1,6 @@
+.zoneExtractor {
+  width: 100%;
+}
+.zoneExtractor * {
+  vertical-align: top;
+}

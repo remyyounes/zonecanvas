@@ -1,0 +1,16 @@
+.zoneCanvas {
+  position: relative;
+  width: 100%;
+  min-height: 50px;
+  background: rgb(255, 250, 241);
+  overflow-y: hidden;
+}
+
+.zoneCanvas canvas{
+  background: white;
+  position: absolute;
+  cursor: crosshair;
+}
+
+.zoneCanvas canvas.viewport{ width:100%; }
+.zoneCanvas canvas.drawing { background: transparent; }

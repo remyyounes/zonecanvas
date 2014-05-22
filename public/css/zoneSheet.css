@@ -1,0 +1,59 @@
+.sheetList {
+  padding:20px;
+  list-style: none;
+  max-width: 900px;
+  margin: auto;
+  position:relative;
+}
+.zoneSheet {
+  border: 1px solid #ccc;
+  padding:20px;
+  margin:20px;
+  background: rgb(255, 245, 211);
+}
+
+.zoneSheet > * {
+  display: inline-block;
+  vertical-align:top;
+}
+.zoneSheet > .form {
+  padding: 20px;
+  background: rgb(255, 250, 241);
+  margin-left: 20px;
+  width: calc( 100% - 270px );
+}
+
+.zoneSheet .zoneInput { display: inline-block; }
+.zoneSheet > .form input {
+  border: 1px solid #ddd;
+  padding: 3px;
+}
+
+.zoneSheet > .form label {
+  display: inline-block;
+  width: 100px;
+  text-align:right;
+  padding-right: 10px;
+}
+.zoneSheet > .form button {
+  display: inline-block;
+  background: #DCE9E9;
+  border: 1px solid #ddd;
+  position: relative;
+}
+
+.zoneSheet .picker {
+  display: none;
+  position: absolute;
+  left: 280px;
+}
+
+.zoneSheet .fragment {
+  display: none;
+  margin-top: 20px;
+}
+
+
+.zoneSheet.picking .fragment { display: block; }
+.zoneSheet.picking .picker { display: inline-block; }
+.zoneSheet.picking .form { display: none; }

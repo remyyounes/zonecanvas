@@ -1,0 +1,20 @@
+<html>
+  <head>
+    <title>ZoneCanvas Demo - Canvas</title>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+    <script src="./js/zoneCanvas.js"></script>
+    <script src="./js/canvasDemo.js"></script>
+
+    <link rel="stylesheet" href="css/zoneCanvas.css" type="text/css" media="screen" charset="utf-8">
+    <link rel="stylesheet" href="css/demoBase.css" type="text/css" media="screen" charset="utf-8">
+  </head>
+  <body>
+    <ul id="demo"></ul>
+    <script>
+      var canvasDemo = new CanvasDemo({
+        el: $("#demo"),
+        imageUrl: "documents/gruid-test-guide.png"
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,26 @@
+.fragment .controls div{
+  display: inline-block;
+  margin: 5px 5px 0 0;
+  padding: 5px;
+  background: rgb(255, 250, 241);
+  cursor: pointer;
+}
+.fragment .controls div.cancel { color: red; }
+.fragment .controls div.save { color: green; }
+
+.fragment .info {
+  list-style: none;
+  padding: 0;
+  width: 190px;
+}
+.fragment .info li {
+  background: rgb(255, 250, 241);
+  margin: 5px 5px 0 0;
+  padding: 5px;
+  width: 100%;
+}
+.fragment .info li label {
+  margin-right: 10px;
+  font-weight: bold;
+}
+.fragment .info li label:after { content: ":"; display: inline-block; }

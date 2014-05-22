@@ -1,0 +1,9 @@
+body {
+  font-family: sans-serif;
+  background: #DCE9E9;
+}
+
+.canvasDemo  .zoneCanvas {
+  margin: 10px;
+  display: inline-block;
+}
