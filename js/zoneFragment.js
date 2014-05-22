@@ -71,6 +71,18 @@
       this.viewport.fit();
     },
     runOCR: function(image_data){
+      // this.runOcradOCR(image_data);
+      this.runTesseractOCR(image_data);
+    },
+    runTesseractOCR: function(image_data){
+      var zoneFragment = this;
+      var data = {image_data: image_data };
+      debugger;
+      // $.post("http://localhost:3000/ocr", data, function(message){
+      //   console.log(message);
+      // });
+    },
+    runOcradOCR: function(image_data){
       var zoneFragment = this;
       window.ocradWorker.onmessage = function(e){
         var processingTime = ((Date.now() - start)/1000).toFixed(2);
