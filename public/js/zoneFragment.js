@@ -78,7 +78,15 @@
     },
     runTesseractOCR: function(image_data){
       var zoneFragment = this;
-      var data = {image_data: image_data, test: "test" };
+      debugger;
+      var zone = this.viewport.viewZone;
+      // var data = {image_data: image_data};
+      var data = {
+        id: 1,
+        page: 1,
+        zoneName: "title",
+        zone: zone
+      };
       this.ocrEngine.asyncOcr(data, function(data){
         zoneFragment.ocrResultHandler( { result: data.result } );
       });

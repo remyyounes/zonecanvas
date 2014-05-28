@@ -41,18 +41,69 @@
       var ext = file.name.split('.').slice(-1)[0];
       var reader = new FileReader();
 
-      reader.onload = function (){
-        sheetList.image = new Image();
-        sheetList.image.src = reader.result;
-        sheetList.image.onerror = function (e){ alert("Image loading error. " + e); };
-        sheetList.image.onload = function(){
-          sheetList.addSheet({
-            image: sheetList.image,
-            ocrEngine: this.ocrEngine
-          });
+      if(ext == "png"){
+        reader.onload = function (){
+          var data = reader.result;
+          sheetList.loadPng(data);
         };
+        reader.readAsDataURL(file);
+      } else if (ext == "pdf"){
+        reader.onload = function (){
+          var data = reader.result;
+          sheetList.loadPdf(data);
+        };
+        reader.readAsArrayBuffer(file);
+      } else console.log("Extension not supported", ext);
+
+    },
+    loadPdf: function(data){
+      var sheetList = this;
+      PDFJS.getDocument(data).then(function getPdf(pdf) {
+        sheetList.currentPdf = pdf;
+        sheetList.numPages = pdf.numPages;
+        sheetList.pageIndex = 1;
+        sheetList.loadPdfPage(sheetList.pageIndex);
+      });
+    },
+    loadPdfPage: function (pageIndex, callback) {
+      var sheetList = this;
+      sheetList.currentPdf.getPage(pageIndex).then(function getPdfPage(page) {
+        var callback = function(imageData){
+          sheetList.loadPng(imageData);
+        }
+        var c = document.createElement("CANVAS");
+        sheetList.pageToImage(c, page, callback );
+      });
+    },
+    pageToImage: function(canvas, page, callback){
+      var sheetList = this;
+      var viewport = page.getViewport(1),
+      ctx = canvas.getContext('2d');
+
+      // Prepare canvas using PDF page dimensions
+      canvas.height = viewport.height;
+      canvas.width = viewport.width;
+
+      // Render PDF page into canvasPrimary context
+      page.render({canvasContext: ctx, viewport: viewport}).then(
+        function(e){
+          var imageData = canvas.toDataURL("image/png");
+          if(callback) callback(imageData);
+        }
+      );
+    },
+    loadPng: function(data, loaded){
+      var sheetList = this;
+      sheetList.image = new Image();
+      sheetList.image.src = data;
+      sheetList.image.onerror = function (e){ alert("Image loading error. " + e); };
+      sheetList.image.onload = function(){
+        sheetList.addSheet({
+          image: sheetList.image,
+          ocrEngine: sheetList.ocrEngine
+        });
       };
-      reader.readAsDataURL(file);
+      // loaded && sheetList.image.onload();
     }
   }
 

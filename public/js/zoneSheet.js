@@ -56,7 +56,6 @@
     attachHandlers: function(){
       var zoneSheet = this;
       $(this.navigator).on("zoneselected", function(event, data){
-        debugger;
         zoneSheet.picker.zoomZone(data);
       });
       $(this.picker).on("zoneselected", function(event, data){
@@ -75,7 +74,7 @@
     showZonePicker: function(data){
       this.fragment.clearInfo();
       this.fragment.setName(data.field, data.value);
-      this.navigator.preview.selectCorner();
+      this.navigator.selectCorner();
       this.picker.viewport.selectCorner();
       this.$el.addClass("picking");
     },

@@ -2,6 +2,7 @@
   <head>
     <title>ZoneCanvas Demo</title>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+    <script  src="http://localhost:8888/build/pdf.js"></script>
     <script src="./js/zoneCanvas.js"></script>
     <script src="./js/zoneExtractor.js"></script>
     <script src="./js/zoneNavigator.js"></script>
@@ -16,6 +17,7 @@
   <body>
     <div id="zoneCanvasDemo"></div>
     <script>
+      PDFJS.workerSrc = 'http://localhost:8888/build/pdf.worker.js';
       var ze = new ZoneExtractor({
         el: $("#zoneCanvasDemo"),
         zoomFactor:1

@@ -1,8 +1,11 @@
 <html>
   <head>
     <title>ZoneCanvas Demo - sheets</title>
+    <script  src="./js/ocr/pdf.js"></script>
+    <script src="./js/lib.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
     <script src="./js/tesseract.js"></script>
+    <script src="./js/documentCanvas.js"></script>
     <script src="./js/zoneCanvas.js"></script>
     <script src="./js/zoneExtractor.js"></script>
     <script src="./js/zoneNavigator.js"></script>
@@ -22,10 +25,11 @@
     <ul id="sheetlist"></ul>
     <script>
       // window.ocradWorker = new Worker('http://localhost/javascript/ocrad.js/worker.js');
+      PDFJS.workerSrc = 'js/ocr/pdf.worker.js';
+      // PDFJS.workerSrc = 'http://localhost/javascript/pdf.js/build/pdf.worker.js';
       var tesseract = new Tesseract({
         serverUrl: "http://localhost:3000/ocr"
       });
-      debugger;
       var sheetList = new SheetList({
         el: $("#sheetlist"),
         ocrEngine: tesseract
