@@ -4,6 +4,8 @@ var tesseract = require('node-tesseract');
 var path = require('path');
 var fs = require('fs');
 var gm = require('gm');
+var multer  = require('multer');
+var exec = require('child_process').exec;
 
 // var imageUrl = '/documents/gruid-test-guide.png';
 var imageUrl = 'public/documents/out.png';
@@ -34,7 +36,11 @@ var express = require('express'),
   fs_readFile = q.denodeify(fs.readFile),
   fs_writeFile = q.denodeify(fs.writeFile);
 
-app.use(bodyParser());
+app.use(bodyParser({
+  // keepExtensions:true,
+  // uploadDir:path.join(__dirname,'/public/tmp')
+}));
+app.use(multer({ dest: './public/uploads'}))
 app.use(express.static(__dirname + '/public'));
 
 app.post('/ocrdata', function(req, res){
@@ -47,16 +53,44 @@ app.post('/ocrdata', function(req, res){
     return ocr(imagePath);
   }).done(function(result){
     res.json(result);
-  })
+  });
+});
+
+app.post('/pdf', function(req, res){
+  var documentId = 2
+  var file = req.files.file;
+  var pdfPathRelative = file.path;
+  var outputPathRelative = path.join('tmp/', documentId.toString(), '/');
+  var pdfPathFull = path.join(__dirname, pdfPathRelative);
+  var outputPathFull = path.join(__dirname, '/public/', outputPathRelative);
+  !fs.existsSync(outputPathFull) && fs.mkdirSync(outputPathFull);
+  var filenameTemplate = "page";
+  var cmd = 'pdftocairo -png -r 300 ' + pdfPathFull + " "+ outputPathFull + filenameTemplate;
+  exec(cmd, function (error, stdout, stderr) {
+      var dir = fs.readdirSync(outputPathFull);
+      var pages = [];
+      var page = 1;
+      for (var i in dir) {
+        var p = dir[i];
+        pages.push({
+          documentId: documentId,
+          page: page,
+          url: outputPathRelative + filenameTemplate + "-" + page + ".png"
+        });
+        page++;
+      }
+      res.json(pages);
+  });
 });
 
 app.post('/ocr', function(req, res){
-  var imageId = req.body.id;
-  var imagePage = req.body.page;
+  console.log("OCR Request");
+  var documentId = req.body.documentId;
+  var documentPage = req.body.page;
   var zoneName = req.body.zoneName;
   var zone = req.body.zone;
 
-  var imageUrl = [tmpPath, imageId  , "/page-", imagePage].join('');
+  var imageUrl = [tmpPath, documentId  , "/page-", documentPage].join('');
   var imageOutUrl = [imageUrl, ".", zoneName, ".png"].join('');
   console.log(imageOutUrl);
   gm(imageUrl+".png")

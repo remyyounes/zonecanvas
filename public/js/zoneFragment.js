@@ -7,6 +7,8 @@
     this.layoutConstraints = params.layoutConstraints;
     this.name = "";
     this.ocrEngine = params.ocrEngine;
+    this.page = params.page;
+    this.documentId = params.documentId;
     this.init();
   };
 
@@ -82,8 +84,8 @@
       var zone = this.viewport.viewZone;
       // var data = {image_data: image_data};
       var data = {
-        id: 1,
-        page: 1,
+        documentId: this.documentId,
+        page: this.page,
         zoneName: "title",
         zone: zone
       };

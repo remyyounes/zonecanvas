@@ -4,6 +4,8 @@
     this.el = params.el[0];
     this.$el.addClass("zoneSheet");
     this.image = params.image;
+    this.page = params.page;
+    this.documentId = params.documentId;
     this.ocrEngine = params.ocrEngine;
     this.init();
   };
@@ -30,7 +32,9 @@
       this.fragment = new ZoneFragment({
         el: fragment,
         layoutConstraints: { width: 200, height: 200},
-        ocrEngine: this.ocrEngine
+        ocrEngine: this.ocrEngine,
+        documentId: this.documentId,
+        page: this.page
       });
       this.fragment.setImage(this.image);
       this.$fragment = fragment;
