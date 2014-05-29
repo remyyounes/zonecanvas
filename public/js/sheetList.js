@@ -42,14 +42,24 @@
         var name = file.name;
         var size = file.size;
         var type = file.type;
-        var formData = new FormData(sheetList.addForm[0]);
+        var formData = new FormData();
+        formData.append("file", file);
         $.ajax({
           url: '/pdf',
           type: 'POST',
           data: formData,
           cache: false,
           contentType: false,
-          processData: false
+          processData: false,
+          xhr: function() {  // custom xhr
+            myXhr = $.ajaxSettings.xhr();
+            if(myXhr.upload){ // if upload property exists
+                myXhr.upload.addEventListener('progress', function(e){
+                  console.log('progress', e);
+                }, false); // progressbar
+            }
+            return myXhr;
+          },
         }).then(
           function(data){
             for(var i = 0; i<data.length; i++){

@@ -9,6 +9,7 @@
     this.ocrEngine = params.ocrEngine;
     this.page = params.page;
     this.documentId = params.documentId;
+    this.ocrDelayTimer = null;
     this.init();
   };
 
@@ -74,13 +75,16 @@
       this.viewport.fit();
     },
     runOCR: function(image_data){
-      // this.runOcradOCR(image_data);
-      var imageData = this.viewport.canvas.toDataURL();
-      this.runTesseractOCR(imageData);
+      var zoneFragment = this,
+      imageData = this.viewport.canvas.toDataURL();
+      clearTimeout(zoneFragment.ocrDelayTimer);
+      zoneFragment.ocrDelayTimer = setTimeout(function () {
+        zoneFragment.runTesseractOCR(imageData);
+        // zoneFragment.runOcradOCR(image_data);
+      }, 200);
     },
     runTesseractOCR: function(image_data){
       var zoneFragment = this;
-      debugger;
       var zone = this.viewport.viewZone;
       // var data = {image_data: image_data};
       var data = {
@@ -90,7 +94,10 @@
         zone: zone
       };
       this.ocrEngine.asyncOcr(data, function(data){
-        zoneFragment.ocrResultHandler( { result: data.result } );
+        if(!data.error)
+          zoneFragment.ocrResultHandler( { result: data.result } );
+        else
+          console.log(data.error);
       });
     },
     runOcradOCR: function(image_data){

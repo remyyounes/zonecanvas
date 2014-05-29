@@ -1,35 +1,15 @@
 var q = require('q');
 var bodyParser = require('body-parser');
-var tesseract = require('node-tesseract');
 var path = require('path');
 var fs = require('fs');
 var gm = require('gm');
 var multer  = require('multer');
 var exec = require('child_process').exec;
+var imgProc = require('./lib/image_processing');
 
-// var imageUrl = '/documents/gruid-test-guide.png';
-var imageUrl = 'public/documents/out.png';
+// var imagePath = '/documents/gruid-test-guide.png';
+var imagePath = 'public/documents/out.png';
 var tmpPath = 'public/tmp/';
-var ocrOptions = {
-    l: 'eng',
-    psm: 6,
-    binary: '/usr/local/bin/tesseract'
-};
-
-
-var ocr = function(imagePath){
-  var deferred = q.defer();
-  tesseract.process(__dirname + "/" + imagePath, ocrOptions, function(err, text) {
-    debugger;
-      if(err) {
-          deferred.resolve({error: err});
-      } else {
-          deferred.resolve({result: text});
-      }
-  });
-  return deferred.promise;
-}
-
 
 var express = require('express'),
   app = express(),
@@ -50,13 +30,14 @@ app.post('/ocrdata', function(req, res){
     imagePath = "out.png";
 
   fs_writeFile( imagePath, binaryData, "binary").then(function(data) {
-    return ocr(imagePath);
+    return imgProc.ocr(imagePath);
   }).done(function(result){
     res.json(result);
   });
 });
 
 app.post('/pdf', function(req, res){
+
   var documentId = 2
   var file = req.files.file;
   var pdfPathRelative = file.path;
@@ -65,42 +46,53 @@ app.post('/pdf', function(req, res){
   var outputPathFull = path.join(__dirname, '/public/', outputPathRelative);
   !fs.existsSync(outputPathFull) && fs.mkdirSync(outputPathFull);
   var filenameTemplate = "page";
-  var cmd = 'pdftocairo -png -r 300 ' + pdfPathFull + " "+ outputPathFull + filenameTemplate;
+  var cmd = 'pdftocairo -png -r 100 ' + pdfPathFull + " "+ outputPathFull + filenameTemplate;
+
   exec(cmd, function (error, stdout, stderr) {
-      var dir = fs.readdirSync(outputPathFull);
-      var pages = [];
-      var page = 1;
-      for (var i in dir) {
-        var p = dir[i];
-        pages.push({
-          documentId: documentId,
-          page: page,
-          url: outputPathRelative + filenameTemplate + "-" + page + ".png"
+    var dir = fs.readdirSync(outputPathFull);
+    var pages = [];
+    var page = 1;
+    var series = function(item, page){
+      if(item && item.slice(-4) !== ".png"){
+        series(dir.shift(), page);
+      } else if(item) {
+        var filePath = outputPathFull + item;
+        imgProc.getOrientation(filePath).then(function(data){
+          var deferred = q.defer();
+          var angle = data.result;
+          return imgProc.rotateImage(filePath, angle);
+        }).then(function(data){
+          pages.push({
+            documentId: documentId,
+            page: page,
+            url: outputPathRelative + filenameTemplate + "-" + page + ".png"
+          });
+          page++;
+          series(dir.shift(), page);
         });
-        page++;
+      }else{
+        console.log("responding with pages:", pages)
+        res.json(pages);
       }
-      res.json(pages);
+    };
+    series(dir.shift(), page);
   });
 });
 
 app.post('/ocr', function(req, res){
-  console.log("OCR Request");
-  var documentId = req.body.documentId;
-  var documentPage = req.body.page;
-  var zoneName = req.body.zoneName;
-  var zone = req.body.zone;
+  var documentId = req.body.documentId,
+    documentPage = req.body.page,
+    zoneName = req.body.zoneName,
+    zone = req.body.zone,
+    imageBase = [tmpPath, documentId  , "/page-", documentPage].join(''),
+    imagePath = [imageBase, ".png"].join(''),
+    imagePathOut = [imageBase, ".", zoneName, ".png"].join('');
 
-  var imageUrl = [tmpPath, documentId  , "/page-", documentPage].join('');
-  var imageOutUrl = [imageUrl, ".", zoneName, ".png"].join('');
-  console.log(imageOutUrl);
-  gm(imageUrl+".png")
-  .crop(zone.width, zone.height, zone.x, zone.y)
-  .write( imageOutUrl, function (err) {
-    if (!err){
-      ocr(imageOutUrl).done(function(result){
-        res.json(result);
-      })
-    };
+  imgProc.cropZone(imagePath, imagePathOut, zone).then(function(){
+    return imgProc.ocr( __dirname + "/" + imagePathOut );
+  }).done(function(result){
+    res.json(result);
+    console.log("OCR: ", result.result);
   });
 });
 

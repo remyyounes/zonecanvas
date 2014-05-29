@@ -20,7 +20,7 @@
         viewZone: params.viewZone
       }));
       this.$el.append(canvas);
-    }
+    },
     showGrid: function(){
 
       var imgWidth = canvasDemo.image.width;
