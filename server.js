@@ -5,7 +5,10 @@ var fs = require('fs');
 var gm = require('gm');
 var multer  = require('multer');
 var exec = require('child_process').exec;
+var http = require('http');
 var imgProc = require('./lib/image_processing');
+var rest = require('restler');
+
 
 // var imagePath = '/documents/gruid-test-guide.png';
 var imagePath = 'public/documents/out.png';
@@ -15,6 +18,59 @@ var express = require('express'),
   app = express(),
   fs_readFile = q.denodeify(fs.readFile),
   fs_writeFile = q.denodeify(fs.writeFile);
+
+var ocrServer = "192.168.33.42";
+var ocrPath = "/external_api/drawing_sets";
+// "name=test_drawing" -F "drawing_pdf=@package_bde_elan.pdf"  >
+
+
+
+var testDjango = function(pdfPath){
+  var deferred = q.defer();
+  var options = {
+    host: ocrServer,
+    path: ocrPath,
+    port: 4567,
+    method: "GET"
+  };
+
+  var req = http.request(options, function(res) {
+  });
+
+  req.on('error', function(err) {
+    throw err;
+  });
+
+  req.end();
+  fs.createReadStream(pdfPath).pipe(req);
+
+  return deferred.promise;
+}
+
+var djangoOcr = function(pdfPath, documentName){
+  var deferred = q.defer();
+  var endPoint = "http://" + ocrServer + ":4567" + ocrPath;
+
+  fs.stat(pdfPath, function (err, stats) {
+
+    rest.post( endPoint,{
+      multipart: true,
+      data: {
+        'name': 'test.pdf',
+        'drawing_pdf': rest.file(pdfPath, null, stats.size, null, 'application/pdf')
+      }
+    })
+    .on('complete', function(data) {
+      console.log('data', data);
+      deferred.resolve();
+    });
+
+  });
+
+
+  return deferred.promise;
+};
+
 
 app.use(bodyParser({
   // keepExtensions:true,
@@ -46,7 +102,10 @@ app.post('/pdf', function(req, res){
   var outputPathFull = path.join(__dirname, '/public/', outputPathRelative);
   !fs.existsSync(outputPathFull) && fs.mkdirSync(outputPathFull);
   var filenameTemplate = "page";
-  var cmd = 'pdftocairo -png -r 100 ' + pdfPathFull + " "+ outputPathFull + filenameTemplate;
+  var cmd = 'pdftocairo -png -r 300 ' + pdfPathFull + " "+ outputPathFull + filenameTemplate;
+
+  djangoOcr(pdfPathFull, "test_drawing");
+  // testDjango(pdfPathFull);
 
   exec(cmd, function (error, stdout, stderr) {
     var dir = fs.readdirSync(outputPathFull);

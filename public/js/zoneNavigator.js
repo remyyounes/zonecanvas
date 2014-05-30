@@ -9,9 +9,43 @@
     this.layoutConstraints = params.layoutConstraints || { width: 400, height: 400 };
     this.setViewZone( params.viewZone || {x: 0, y: 0, width:0, height: 0} );
     this.image = params.image;
+    this.zones = {};
     this.navigator = params.navigator || false;
+    this.$canvases = $();
     this.init();
   }, ZoneCanvas.prototype);
+
+  ZoneNavigator.prototype.init = function(){
+    this.renderCanvas();
+    this.renderDrawingCanvas();
+    this.renderZoneListCanvas();
+    this.render();
+    this.attachEvents();
+  };
+
+  ZoneNavigator.prototype.renderZoneListCanvas = function(){
+    var canvasZoneList = $("<canvas class='zonelist transparent'></canvas>");
+    canvasZoneList.attr("width", this.$el.width());
+    canvasZoneList.attr("height", this.$el.height());
+    this.$el.append(canvasZoneList);
+    this.canvasZoneList = canvasZoneList[0];
+    this.$canvasZoneList = canvasZoneList;
+    this.contextZoneList = this.canvasZoneList.getContext("2d");
+    this.$canvases = this.$canvases.add(this.$canvasZoneList);
+  };
+
+  ZoneNavigator.prototype.renderZoneList = function(){
+    this.clear(this.canvasZoneList);
+    for(var i in this.zones){
+      var z = this.zones[i];
+      this.drawBox( this.contextZoneList, z);
+    }
+  };
+
+  ZoneNavigator.prototype.addZone = function(name, zone){
+    this.zones[name] = this.getLocalCoordinates(zone);
+    this.renderZoneList();
+  };
 
   ZoneNavigator.prototype.setImage = function(image){
     this.drawImage(image);

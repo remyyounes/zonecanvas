@@ -13,4 +13,5 @@
 }
 
 .zoneCanvas canvas.viewport{ width:100%; }
-.zoneCanvas canvas.drawing { background: transparent; }
+.zoneCanvas canvas.transparent { background: transparent; }
+.zoneCanvas canvas.drawing{ z-index:100; }

@@ -10,6 +10,7 @@
     this.setViewZone( params.viewZone || {x: 0, y: 0, width:0, height: 0} );
     this.setImage(params.image);
     this.navigator = params.navigator || false;
+    this.$canvases = $();
     this.init();
   }, { getType: function() { return this.Constructor.name; }});
 
@@ -33,6 +34,7 @@
     this.canvas = canvas[0];
     this.$canvas = canvas;
     this.context = this.canvas.getContext("2d");
+    this.$canvases = this.$canvases.add(this.$canvas);
   };
   DocumentCanvas.prototype.attachEvents = function(){
   };
@@ -134,13 +136,12 @@
     var canvasHeight = this.viewZone.height * this.zoomFactor,
       canvasWidth = this.viewZone.width * this.zoomFactor,
       canvasLeft = ((this.layoutConstraints.width || canvasWidth ) - canvasWidth) / 2,
-      canvasTop = ((this.layoutConstraints.height || canvasHeight ) - canvasHeight) / 2,
-      $canvases = this.$canvas.add(this.$canvasDrawing);
+      canvasTop = ((this.layoutConstraints.height || canvasHeight ) - canvasHeight) / 2;
 
-    $canvases.attr("width", canvasWidth);
-    $canvases.attr("height", canvasHeight);
-    $canvases.css("left", canvasLeft);
-    $canvases.css("top", canvasTop);
+    this.$canvases.attr("width", canvasWidth);
+    this.$canvases.attr("height", canvasHeight);
+    this.$canvases.css("left", canvasLeft);
+    this.$canvases.css("top", canvasTop);
 
     this.$el.css("width", this.layoutConstraints.width || canvasWidth);
     this.$el.css("height", this.layoutConstraints.height || canvasHeight);

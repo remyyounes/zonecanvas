@@ -71,6 +71,10 @@
       $(this.fragment).on("zonesaved", function(event, data){
         zoneSheet.form.setValue(this.name, data.info[this.name]);
         zoneSheet.hideZonePicker();
+        zoneSheet.navigator.addZone(
+          this.name,
+          zoneSheet.picker.viewport.getStandardCoordinates()
+        );
       }).on("zonecancelled", function(event, data){
         zoneSheet.hideZonePicker();
       });
@@ -84,6 +88,9 @@
     },
     hideZonePicker: function(){
       this.$el.removeClass("picking");
+    },
+    loadZoneProfile: function(profile){
+
     }
 
   };

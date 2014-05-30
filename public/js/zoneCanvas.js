@@ -10,6 +10,7 @@
     this.viewZone = params.viewZone || {x: 0, y: 0, width:0, height: 0};
     this.image = params.image;
     this.navigator = params.navigator || false;
+    this.$canvases = $();
     this.init();
   },DocumentCanvas.prototype);
 
@@ -23,13 +24,14 @@
     this.attachDrawingEvents();
   };
   ZoneCanvas.prototype.renderDrawingCanvas = function(){
-    var canvas = $("<canvas class='drawing'></canvas>");
+    var canvas = $("<canvas class='drawing transparent'></canvas>");
     canvas.attr("width", this.$el.width());
     canvas.attr("height", this.$el.height());
     this.$el.append(canvas);
     this.canvasDrawing = canvas[0];
     this.$canvasDrawing = canvas;
     this.contextDrawing = this.canvasDrawing.getContext("2d");
+    this.$canvases = this.$canvases.add(this.$canvasDrawing);
   };
   ZoneCanvas.prototype.attachDrawingEvents = function(){
     var zoneCanvas = this;
@@ -92,14 +94,19 @@
     this.selectionCoordinates = zone;
     this.drawSelectionBox();
   };
+  ZoneCanvas.prototype.drawBox = function(context, zone, color){
+    context.strokeStyle = color || "blue";
+    context.strokeRect(
+      zone.x,
+      zone.y,
+      zone.width,
+      zone.height
+    );
+    context.strokeStyle = "black";
+  }
   ZoneCanvas.prototype.drawSelectionBox = function() {
     this.clear(this.canvasDrawing);
-    this.contextDrawing.strokeRect(
-      this.selectionCoordinates.x,
-      this.selectionCoordinates.y,
-      this.selectionCoordinates.width,
-      this.selectionCoordinates.height
-    );
+    this.drawBox(this.contextDrawing, this.selectionCoordinates, "red");
     $(this).trigger("zoneselected", this.getStandardCoordinates());
     console.log(this.getStandardCoordinates());
   };
