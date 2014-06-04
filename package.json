@@ -10,7 +10,9 @@
     "multer": "~0.0.7",
     "node-tesseract": "~0.2.6",
     "q": "~1.0.1",
-    "pdfutils": "~0.3.2"
+    "pdfutils": "~0.3.2",
+    "rimraf": "~2.2.8",
+    "restler": "~3.2.2"
   },
   "devDependencies": {},
   "scripts": {

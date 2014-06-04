@@ -3,6 +3,6 @@ node_modules/*
 
 public/documents/*
 public/documents/set.pdf
-public/tmp/
+public/tmp/*/*
 public/uploads/
 
