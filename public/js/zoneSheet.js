@@ -60,14 +60,19 @@
     attachHandlers: function(){
       var zoneSheet = this;
       $(this.navigator).on("zoneselected", function(event, data){
-        zoneSheet.picker.zoomZone(data);
+        zoneSheet.picker.showZone(data);
       });
       $(this.picker).on("zoneselected", function(event, data){
-        zoneSheet.fragment.zoomZone(data);
+        zoneSheet.fragment.showZone(data);
       });
       $(this.form).on("zonerequested", function(event, data){
         zoneSheet.showZonePicker(data);
       });
+
+      $(this.picker).on("zoom", function(event, data){
+        zoneSheet.navigator.getViewZone
+      });
+
       $(this.fragment).on("zonesaved", function(event, data){
         zoneSheet.form.setValue(this.name, data.info[this.name]);
         zoneSheet.hideZonePicker();
@@ -82,8 +87,8 @@
     showZonePicker: function(data){
       this.fragment.clearInfo();
       this.fragment.setName(data.field, data.value);
-      this.navigator.selectCorner();
-      this.picker.viewport.selectCorner();
+      // this.navigator.selectCorner();
+      // this.picker.viewport.selectCorner();
       this.$el.addClass("picking");
     },
     hideZonePicker: function(){

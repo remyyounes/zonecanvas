@@ -22,6 +22,7 @@
   };
   ZoneCanvas.prototype.attachEvents = function(){
     this.attachDrawingEvents();
+    this.attachZoomingEvents();
   };
   ZoneCanvas.prototype.renderDrawingCanvas = function(){
     var canvas = $("<canvas class='drawing transparent'></canvas>");
@@ -33,6 +34,15 @@
     this.contextDrawing = this.canvasDrawing.getContext("2d");
     this.$canvases = this.$canvases.add(this.$canvasDrawing);
   };
+  ZoneCanvas.prototype.attachZoomingEvents = function(){
+    var zoneCanvas = this;
+    zoneCanvas.$el.on("mousewheel", function(e){
+      e.deltaY > 0 ? zoneCanvas.zoomIn(1.2) :  zoneCanvas.zoomOut(1.2);
+      e.preventDefault();
+      e.stopPropagation();
+      console.log("slow");
+    });
+  },
   ZoneCanvas.prototype.attachDrawingEvents = function(){
     var zoneCanvas = this;
     zoneCanvas.$canvasDrawing.on("mousedown", function(e){
@@ -69,12 +79,12 @@
     zoneCanvas.drawSelectionBox();
   };
 
-  ZoneCanvas.prototype.setPreviewZone = function(coordinates){
+  ZoneCanvas.prototype.setPreviewZone = function(location){
     //get preview size
     var previewSize = this.getPreviewSize();
     this.selectionCoordinates = {
-      x: coordinates.x - previewSize.width / 2,
-      y: coordinates.y - previewSize.height / 2,
+      x: location.x - previewSize.width / 2,
+      y: location.y - previewSize.height / 2,
       width: previewSize.width,
       height: previewSize.height
     };

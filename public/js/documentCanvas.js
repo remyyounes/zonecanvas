@@ -22,7 +22,7 @@
   DocumentCanvas.prototype.render = function(){
     if(!this.image) return;
     if(this.viewZone.width > 0)
-      this.zoomZone(this.viewZone);
+      this.showZone(this.viewZone);
     else
       this.fit();
   };
@@ -39,8 +39,13 @@
   DocumentCanvas.prototype.attachEvents = function(){
   };
 
+  DocumentCanvas.prototype.setPreviewSize = function(size){
+    this.previewSize = size;
+  };
+
   DocumentCanvas.prototype.getPreviewSize = function(){
-    return {width: this.canvas.width / 4, height: this.canvas.height / 4};
+    var size = {width: 100, height: 50 };
+    return { width: size.width / 2, height: size.height / 2 };//this.previewSize;
   };
 
   DocumentCanvas.prototype.getStandardCoordinates = function(){
@@ -54,6 +59,18 @@
       };
     return standardized;
   };
+
+  DocumentCanvas.prototype.getPercentCoordinates = function(zone){
+    var percentages =  {
+      x: zone.x / this.image.width,
+      y: zone.y / this.image.height,
+      width: zone.width / this.image.width,
+      height: zone.height / this.image.height
+    };
+    console.log(percentages);
+    return percentages;
+  };
+
   DocumentCanvas.prototype.getLocalCoordinates = function(zone){
     var ratio = this.zoomFactor,
       localized =  {
@@ -98,21 +115,33 @@
       this.viewZone.height * this.zoomFactor
     );
   };
-  DocumentCanvas.prototype.zoom = function(z){
-    this.zoomFactor = z;
+  DocumentCanvas.prototype.zoom = function(ratio){
+    this.zoomFactor = ratio;
     this.setViewZone({ x:0, y:0, width:this.image.width, height:this.image.height });
     this.adjustCanvasDimensions(this.getOrientation());
     this.drawZone();
   };
-  DocumentCanvas.prototype.zoomIn = function(z){
-    this.zoomFactor *= z || 2;
-    this.zoom(this.zoomFactor);
+  DocumentCanvas.prototype.zoomIn = function(ratio){
+    ratio = ratio || 2;
+    this.zoomZone(ratio);
   };
-  DocumentCanvas.prototype.zoomOut = function(z){
-    this.zoomFactor /= z || 2;
-    this.zoom(this.zoomFactor);
+  DocumentCanvas.prototype.zoomOut = function(ratio){
+    ratio = ratio || 2;
+    this.zoomZone(1/ratio);
   };
-  DocumentCanvas.prototype.zoomZone = function(zone){
+
+  DocumentCanvas.prototype.zoomZone = function(ratio){
+    var w = this.viewZone.width * ratio,
+      h = this.viewZone.height * ratio;
+    this.viewZone = {
+      x: this.viewZone.x - (w - this.viewZone.width) / 2,
+      y: this.viewZone.y - (h - this.viewZone.height) / 2,
+      width: w,
+      height: h
+    };
+    this.showZone(this.viewZone);
+  };
+  DocumentCanvas.prototype.showZone = function(zone){
     this.setViewZone( this.normalizeZone(zone) );
     var orientation = this.getOrientation(),
       dimension = orientation ? "width" : "height";

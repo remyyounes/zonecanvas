@@ -49,7 +49,6 @@ app.post('/pdf', function(req, res){
   var pngPathOutput = path.join(__dirname, 'public', outputPathRelative);
 
   // classifier.djangoOcr(pdfPathFull, "test_drawing");
-  console.log(pdfPathFull, pngPathOutput, documentId);
 
   imgProc.pdfToPng(pdfPathFull, pngPathOutput, documentId).then(function(pages){
     console.log("responding with pages:", pages);
@@ -63,13 +62,18 @@ app.post('/ocr', function(req, res){
     documentPage = req.body.page,
     zoneName = req.body.zoneName,
     zone = req.body.zone,
+    zonePct = req.body.zonePct,
     imageBase = [tmpPath, documentId  , "/page-", documentPage].join(''),
     imagePath = [imageBase, ".png"].join(''),
     imagePathOut = [imageBase, ".", zoneName, ".png"].join('');
-
-  imgProc.cropZone(imagePath, imagePathOut, zone).then(function(){
+  imgProc.getZoneFromPct(imagePath, zonePct)
+  .then(function(data){
+    return imgProc.cropZone(imagePath, imagePathOut, data.zone);
+  })
+  .then(function(){
     return imgProc.ocr( __dirname + "/" + imagePathOut );
-  }).done(function(result){
+  })
+  .done(function(result){
     res.json(result);
     console.log("OCR: ", result.result);
   });

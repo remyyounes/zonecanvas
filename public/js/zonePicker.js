@@ -25,8 +25,8 @@
       this.viewport.drawImage(this.image);
       this.viewport.fit();
     },
-    zoomZone: function(zone){
-      this.viewport.zoomZone(zone);
+    showZone: function(zone){
+      this.viewport.showZone(zone);
     },
     attachHandlers: function(){
       var zonePicker = this;

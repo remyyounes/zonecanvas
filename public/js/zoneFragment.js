@@ -62,9 +62,9 @@
       this.name = attr;
       this.setInfo(attr, value);
     },
-    zoomZone: function(zone){
+    showZone: function(zone){
       if(!zone.width || !zone.height) return;
-      this.viewport.zoomZone(zone);
+      this.viewport.showZone(zone);
       this.runOCR(this.viewport.getImageData());
       for(coord in zone)
         this.setInfo(coord, Math.round(zone[coord]));
@@ -85,13 +85,15 @@
     },
     runTesseractOCR: function(image_data){
       var zoneFragment = this;
-      var zone = this.viewport.viewZone;
+      var zone = this.viewport.viewZone,
+        zonePct = this.viewport.getPercentCoordinates(this.viewport.viewZone);
       // var data = {image_data: image_data};
       var data = {
         documentId: this.documentId,
         page: this.page,
         zoneName: "title",
-        zone: zone
+        zone: zone,
+        zonePct: zonePct
       };
       this.ocrEngine.asyncOcr(data, function(data){
         if(!data.error)
