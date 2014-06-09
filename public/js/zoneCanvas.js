@@ -98,11 +98,11 @@
       this.selectionCoordinates.height = coordinates.y - this.selectionCoordinates.y;
     }
   };
-  ZoneCanvas.prototype.setSelectionZone = function(zone){
+  ZoneCanvas.prototype.setSelectionZone = function(zone, silent){
     // convert true zone to scaled zone
     var zone = this.getLocalCoordinates(zone);
     this.selectionCoordinates = zone;
-    this.drawSelectionBox();
+    this.drawSelectionBox(silent);
   };
   ZoneCanvas.prototype.drawBox = function(context, zone, color){
     context.strokeStyle = color || "blue";
@@ -114,11 +114,10 @@
     );
     context.strokeStyle = "black";
   }
-  ZoneCanvas.prototype.drawSelectionBox = function() {
+  ZoneCanvas.prototype.drawSelectionBox = function(silent) {
     this.clear(this.canvasDrawing);
     this.drawBox(this.contextDrawing, this.selectionCoordinates, "red");
-    $(this).trigger("zoneselected", this.getStandardCoordinates());
-    console.log(this.getStandardCoordinates());
+    !silent && $(this).trigger("zoneselected", this.getStandardCoordinates());
   };
   ZoneCanvas.prototype.selectCorner = function(){
     this.selectionCoordinates.x = this.canvas.width / 2;

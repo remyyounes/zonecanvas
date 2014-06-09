@@ -140,6 +140,7 @@
       height: h
     };
     this.showZone(this.viewZone);
+    $(this).trigger("zonezoomed", this.viewZone);
   };
   DocumentCanvas.prototype.showZone = function(zone){
     this.setViewZone( this.normalizeZone(zone) );

@@ -64,13 +64,12 @@
       });
       $(this.picker).on("zoneselected", function(event, data){
         zoneSheet.fragment.showZone(data);
-      });
-      $(this.form).on("zonerequested", function(event, data){
-        zoneSheet.showZonePicker(data);
+      }).on("zonezoomed", function(event, data){
+        zoneSheet.navigator.setSelectionZone(data, true);
       });
 
-      $(this.picker).on("zoom", function(event, data){
-        zoneSheet.navigator.getViewZone
+      $(this.form).on("zonerequested", function(event, data){
+        zoneSheet.showZonePicker(data);
       });
 
       $(this.fragment).on("zonesaved", function(event, data){
@@ -78,7 +77,7 @@
         zoneSheet.hideZonePicker();
         zoneSheet.navigator.addZone(
           this.name,
-          zoneSheet.picker.viewport.getStandardCoordinates()
+          zoneSheet.picker.getStandardCoordinates()
         );
       }).on("zonecancelled", function(event, data){
         zoneSheet.hideZonePicker();
