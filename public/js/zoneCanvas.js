@@ -37,10 +37,10 @@
   ZoneCanvas.prototype.attachZoomingEvents = function(){
     var zoneCanvas = this;
     zoneCanvas.$el.on("mousewheel", function(e){
-      e.deltaY > 0 ? zoneCanvas.zoomIn(1.2) :  zoneCanvas.zoomOut(1.2);
+      var zoomRatio = 1.05;
+      e.deltaY > 0 ? zoneCanvas.zoomIn(zoomRatio) :  zoneCanvas.zoomOut(zoomRatio);
       e.preventDefault();
       e.stopPropagation();
-      console.log("slow");
     });
   },
   ZoneCanvas.prototype.attachDrawingEvents = function(){
