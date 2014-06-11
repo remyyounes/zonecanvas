@@ -52,6 +52,22 @@
     this.fit();
   };
 
+  ZoneNavigator.prototype.attachEvents = function(){
+    this.attachDrawingEvents();
+    this.attachZoomingEvents();
+  };
+
+  ZoneNavigator.prototype.attachZoomingEvents = function(){
+    var zoneNavigator = this;
+    zoneNavigator.$el.on("mousewheel", function(e){
+      var zoomRatio = 1.05;
+      zoomRatio = e.deltaY > 0 ? zoomRatio : 1/zoomRatio;
+      zoneNavigator.zoomSelectionZone(zoomRatio);
+      e.preventDefault();
+      e.stopPropagation();
+    });
+  };
+
   ZoneNavigator.prototype.handleMouseDown = function(e){
     var zoneNavigator = this;
     e.preventDefault();
@@ -88,7 +104,7 @@
     };
   };
 
-  DocumentCanvas.prototype.setPreviewSize = function(zone){
+  ZoneNavigator.prototype.setPreviewSize = function(zone){
     var localDimensions = this.getLocalCoordinates(zone);
     this.previewSize = {
       width: localDimensions.width,
@@ -96,9 +112,21 @@
     };
   };
 
-  DocumentCanvas.prototype.getPreviewSize = function(){
+  ZoneNavigator.prototype.getPreviewSize = function(){
     this.previewSize = this.previewSize || this.getLocalCoordinates(this.viewZone);
     return this.previewSize;
+  };
+
+  ZoneNavigator.prototype.getSelectionZone = function(){
+    return this.selectionCoordinates.width ? this.selectionCoordinates : this.getLocalCoordinates(this.viewZone);
+  }
+
+  ZoneNavigator.prototype.zoomSelectionZone = function(ratio){
+    ratio = ratio || 2;
+    this.selectionCoordinates = this.zoomZone(this.getSelectionZone(), ratio);
+    this.drawSelectionBox();
+    this.previewSize = this.selectionCoordinates;
+    // $(this).trigger("zoneselected", this.getStandardCoordinates());
   };
 
   window.ZoneNavigator = ZoneNavigator;

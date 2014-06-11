@@ -80,7 +80,6 @@
     }
   };
   ZoneCanvas.prototype.setSelectionZone = function(zone, silent){
-    // convert true zone to scaled zone
     var zone = this.getLocalCoordinates(zone);
     this.selectionCoordinates = zone;
     this.drawSelectionBox(silent);

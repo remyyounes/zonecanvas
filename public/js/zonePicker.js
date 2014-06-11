@@ -31,7 +31,8 @@
     var zonePicker = this;
     zonePicker.$el.on("mousewheel", function(e){
       var zoomRatio = 1.05;
-      e.deltaY > 0 ? zonePicker.zoomIn(zoomRatio) :  zonePicker.zoomOut(zoomRatio);
+      zoomRatio = e.deltaY > 0 ? zoomRatio : 1/zoomRatio;
+      zonePicker.zoomViewZone(zoomRatio);
       e.preventDefault();
       e.stopPropagation();
     });

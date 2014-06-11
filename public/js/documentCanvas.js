@@ -111,27 +111,25 @@
     this.adjustCanvasDimensions(this.getOrientation());
     this.drawZone();
   };
-  DocumentCanvas.prototype.zoomIn = function(ratio){
-    ratio = ratio || 2;
-    this.zoomZone(ratio);
-  };
-  DocumentCanvas.prototype.zoomOut = function(ratio){
-    ratio = ratio || 2;
-    this.zoomZone(1/ratio);
-  };
 
-  DocumentCanvas.prototype.zoomZone = function(ratio){
-    var w = this.viewZone.width * ratio,
-      h = this.viewZone.height * ratio;
-    this.viewZone = {
-      x: this.viewZone.x - (w - this.viewZone.width) / 2,
-      y: this.viewZone.y - (h - this.viewZone.height) / 2,
-      width: w,
-      height: h
-    };
+  DocumentCanvas.prototype.zoomViewZone = function(ratio){
+    ratio = ratio || 2;
+    this.viewZone = this.zoomZone(this.viewZone, ratio);
     this.showZone(this.viewZone);
     $(this).trigger("zonezoomed", this.viewZone);
   };
+
+  DocumentCanvas.prototype.zoomZone = function(zone, ratio){
+    var w = zone.width * ratio,
+      h = zone.height * ratio;
+    return  {
+      x: zone.x - (w - zone.width) / 2,
+      y: zone.y - (h - zone.height) / 2,
+      width: w,
+      height: h
+    };
+  };
+
   DocumentCanvas.prototype.showZone = function(zone){
     this.setViewZone( this.normalizeZone(zone) );
     var orientation = this.getOrientation(),
