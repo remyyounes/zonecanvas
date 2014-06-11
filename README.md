@@ -7,11 +7,9 @@ a prototype app that extracts text information from user defined areas on a PDF.
 Binaries needed:
 --
 
-**pdftocairo** converts PDFs to PNG format.
-**imagemagick** is responsible for cropping PNG to user defined zones
-**tesseract** handles the text extraction
-
-http://manpages.ubuntu.com/manpages/precise/man1/pdftocairo.1.html
+- [pdftocairo](http://manpages.ubuntu.com/manpages/precise/man1/pdftocairo.1.html) converts PDFs to PNG format.
+- [imagemagick](http://aheckmann.github.io/gm/) is responsible for cropping PNG to user defined zones
+- [tesseract](https://github.com/desmondmorris/node-tesseract) handles the text extraction
 
 
 install
@@ -21,14 +19,14 @@ install
 `cd zonecanvas`
 `npm install `
 
-if you encounter this problem:
+**If you encounter this problem:**
 
-Package 'xcb-shm', required by 'cairo', not found
+> Package 'xcb-shm', required by 'cairo', not found
 gyp: Call to 'pkg-config --cflags poppler-glib cairo' returned exit status 1. while trying to load binding.gyp
 
 you might need to fix your path:
 
-export`PKG_CONFIG_PATH=/opt/X11/lib/pkgconfig`
+`export PKG_CONFIG_PATH=/opt/X11/lib/pkgconfig`
 
 Getting Started
 --
