@@ -36,17 +36,8 @@
     this.context = this.canvas.getContext("2d");
     this.$canvases = this.$canvases.add(this.$canvas);
   };
-  DocumentCanvas.prototype.attachEvents = function(){
-  };
 
-  DocumentCanvas.prototype.setPreviewSize = function(size){
-    this.previewSize = size;
-  };
-
-  DocumentCanvas.prototype.getPreviewSize = function(){
-    var size = {width: 100, height: 50 };
-    return { width: size.width / 2, height: size.height / 2 };//this.previewSize;
-  };
+  DocumentCanvas.prototype.attachEvents = function(){ };
 
   DocumentCanvas.prototype.getStandardCoordinates = function(){
     var ratio = 1/this.zoomFactor,
@@ -67,15 +58,14 @@
       width: zone.width / this.image.width,
       height: zone.height / this.image.height
     };
-    console.log(percentages);
     return percentages;
   };
 
   DocumentCanvas.prototype.getLocalCoordinates = function(zone){
     var ratio = this.zoomFactor,
       localized =  {
-        x: zone.x * ratio,// + this.viewZone.x,
-        y: zone.y * ratio,// + this.viewZone.y,
+        x: zone.x * ratio,
+        y: zone.y * ratio,
         width: zone.width * ratio,
         height: zone.height * ratio
       };

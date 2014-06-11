@@ -66,6 +66,7 @@
         zoneSheet.fragment.showZone(data);
       }).on("zonezoomed", function(event, data){
         zoneSheet.navigator.setSelectionZone(data, true);
+        zoneSheet.navigator.setPreviewSize(data);
       });
 
       $(this.form).on("zonerequested", function(event, data){

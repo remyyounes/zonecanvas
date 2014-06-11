@@ -79,16 +79,6 @@
     zoneCanvas.drawSelectionBox();
   };
 
-  ZoneCanvas.prototype.setPreviewZone = function(location){
-    //get preview size
-    var previewSize = this.getPreviewSize();
-    this.selectionCoordinates = {
-      x: location.x - previewSize.width / 2,
-      y: location.y - previewSize.height / 2,
-      width: previewSize.width,
-      height: previewSize.height
-    };
-  };
   ZoneCanvas.prototype.setMouseSelectionCoordinates = function(coordinates, startCoordinates){
     if(startCoordinates){
       this.selectionCoordinates.x = coordinates.x;

@@ -78,6 +78,28 @@
     zoneNavigator.drawSelectionBox();
   };
 
+  ZoneNavigator.prototype.setPreviewZone = function(location){
+    var pSize = this.getPreviewSize();
+    this.selectionCoordinates = {
+      x: location.x - pSize.width / 2,
+      y: location.y - pSize.height / 2,
+      width: pSize.width,
+      height: pSize.height
+    };
+  };
+
+  DocumentCanvas.prototype.setPreviewSize = function(zone){
+    var localDimensions = this.getLocalCoordinates(zone);
+    this.previewSize = {
+      width: localDimensions.width,
+      height: localDimensions.height
+    };
+  };
+
+  DocumentCanvas.prototype.getPreviewSize = function(){
+    this.previewSize = this.previewSize || this.getLocalCoordinates(this.viewZone);
+    return this.previewSize;
+  };
 
   window.ZoneNavigator = ZoneNavigator;
 })();
