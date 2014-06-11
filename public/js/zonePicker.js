@@ -22,42 +22,20 @@
     this.fit();
   };
 
-  // var ZonePicker = function(params){
-  //   this.zoomFactor = params.zoomFactor || 1;
-  //   this.el = params.el[0];
-  //   this.$el = params.el;
-  //   this.layoutConstraints = params.layoutConstraints;
-  //   this.init();''
-  // };
-  //
-  // ZonePicker.prototype = {
-  //   init: function(){
-  //     this.renderViewPort();
-  //     this.attachHandlers();
-  //   },
-  //   renderViewPort: function(){
-  //     var viewport = $("<div id='pickerCanvas'></div>");
-  //     this.$el.append(viewport);
-  //     this.viewport = new ZoneCanvas({
-  //       el: viewport,
-  //       layoutConstraints: this.layoutConstraints
-  //     });
-  //   },
-  //   setImage: function(image){
-  //     this.image = image;
-  //     this.viewport.drawImage(this.image);
-  //     this.viewport.fit();
-  //   },
-  //   showZone: function(zone){
-  //     this.viewport.showZone(zone);
-  //   },
-  //   attachHandlers: function(){
-  //     var zonePicker = this;
-  //     $(this.viewport).on("zoneselected", function(e, data){
-  //       $(zonePicker).trigger("zoneselected", [data]);
-  //     });
-  //   },
-  // };
+  ZonePicker.prototype.attachEvents = function(){
+    this.attachDrawingEvents();
+    this.attachZoomingEvents();
+  };
+
+  ZonePicker.prototype.attachZoomingEvents = function(){
+    var zonePicker = this;
+    zonePicker.$el.on("mousewheel", function(e){
+      var zoomRatio = 1.05;
+      e.deltaY > 0 ? zonePicker.zoomIn(zoomRatio) :  zonePicker.zoomOut(zoomRatio);
+      e.preventDefault();
+      e.stopPropagation();
+    });
+  };
 
   window.ZonePicker = ZonePicker;
 })();
